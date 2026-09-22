@@ -1,4 +1,5 @@
-import { Routes, Route } from "react-router-dom"; //In Next.js rrd package is not required
+import { Navigate, Outlet, Route, Routes, useLocation } from "react-router-dom";
+import { useAppSelector } from "../store/hooks";
 
 import Dashboard from "../pages/Dashboard";
 import Products from "../pages/Products";
@@ -7,43 +8,25 @@ import Customers from "../pages/Customers";
 import Profile from "../pages/Profile";
 import LoginPage from "../pages/LoginPage";
 
+const ProtectedRoute = () => {
+  const location = useLocation();
+  const token = useAppSelector((state) => state.auth.token);
+  return token ? <Outlet /> : <Navigate to="/login" replace state={{ from: location }} />;
+};
+
 const AppRoutes = () => {
   return (
     <Routes>
-
-      {/* WIP - Parent-Child Routes */}
-
-      {/* Root route */}
-      <Route path="/" element={<Dashboard />} />
-
-      <Route
-        path="/products"
-        element={<Products />}
-      />
-
-      <Route
-        path="/suppliers"
-        element={<SupplierPage />}
-      />
-
-      <Route
-        path="/customers"
-        element={<Customers />}
-      />
-
-      <Route
-        path="/profile"
-        element={<Profile />}
-      />
-
       <Route path="/login" element={<LoginPage />} />
-
-      {/* Inline component */}
-      <Route path="/contact-us" element = { <h2>Contact Us!!!!! </h2> } />
-
-      {/* Unmatching route */}
-      <Route path="*" element={ <Dashboard /> } />
-
+      <Route element={<ProtectedRoute />}>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/suppliers" element={<SupplierPage />} />
+        <Route path="/customers" element={<Customers />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/contact-us" element={<h2>Contact Us!!!!!</h2>} />
+      </Route>
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

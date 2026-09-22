@@ -17,31 +17,29 @@ import {
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 
-import {
-    clearToken,
-    isAuthenticated
-} from "../utils/auth";
+import { logout } from "../store/authSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 const Navbar = () => {
 
     const [open, setOpen] =
         useState(false);
 
-    const navigate =
-        useNavigate();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     // const loggedIn =
     //     isAuthenticated();
-    const [loggedIn, setLoggedIn] =
-    useState(isAuthenticated());
+    const loggedIn = Boolean(useAppSelector((state) => state.auth.token));
+    const dispatch = useAppDispatch();
 
     const handleLogout = () => {
 
-        clearToken();
+        dispatch(logout());
 
         navigate("/login");
     };
@@ -67,26 +65,29 @@ const Navbar = () => {
 
     return (
 
-        <AppBar position="static">
+        <AppBar position="sticky" className="app-navbar">
 
-            <Toolbar>
+            <Toolbar className="navbar-toolbar">
 
-                <Typography
-                    variant="h6"
-                    sx={{ flexGrow: 1 }}
+                <Box
+                    component={Link}
+                    to="/"
+                    className="navbar-brand"
                 >
-                    OPS
-                </Typography>
+                    <Box>
+                        <Typography variant="h6" className="navbar-title">
+                            OPS
+                        </Typography>
+                        <Typography variant="caption" className="navbar-subtitle">
+                            Operations platform
+                        </Typography>
+                    </Box>
+                </Box>
 
                 {/* Desktop Menu */}
 
                 <Box
-                    sx={{
-                        display: {
-                            xs: "none",
-                            md: "flex"
-                        }
-                    }}
+                    className="navbar-menu"
                 >
 
                     {menuItems.map(item => (
@@ -96,6 +97,7 @@ const Navbar = () => {
                             color="inherit"
                             component={Link}
                             to={item.path}
+                            className={`navbar-link ${location.pathname === item.path ? "navbar-link-active" : ""}`}
                         >
                             {item.text}
                         </Button>
@@ -106,6 +108,7 @@ const Navbar = () => {
                         <Button
                             color="inherit"
                             onClick={handleLogout}
+                            className="navbar-logout"
                         >
                             Logout
                         </Button>
@@ -126,12 +129,7 @@ const Navbar = () => {
                 <IconButton
                     color="inherit"
                     edge="end"
-                    sx={{
-                        display: {
-                            xs: "block",
-                            md: "none"
-                        }
-                    }}
+                    className="navbar-mobile"
                     onClick={() => setOpen(true)}
                 >
                     <MenuIcon />
@@ -146,7 +144,7 @@ const Navbar = () => {
             >
 
                 <Box
-                    sx={{ width: 250 }}
+                    className="navbar-drawer"
                     role="presentation"
                 >
 
@@ -245,7 +243,6 @@ export default Navbar;
 
 //         <Typography
 //           variant="h6"
-//           sx={{ flexGrow: 1 }}
 //         >
 //           OPS
 //         </Typography>

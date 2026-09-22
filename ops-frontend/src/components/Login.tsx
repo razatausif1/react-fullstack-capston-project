@@ -1,15 +1,11 @@
 //File src/components/Login.tsx
 //rafce
-import React, {useState} from 'react';
+import React from 'react';
 import axios from 'axios';
 
 const Login = () => {
 
-    const [loginData, setLoginData] = useState( {username:"admin", password:"admin"});
-
-    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        //Invoke setLoginData()
-    }
+    const loginData = {username:"admin", password:"admin"};
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

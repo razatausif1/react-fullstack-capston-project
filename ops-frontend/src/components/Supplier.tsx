@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 const Supplier = () => {
 
     // const [supplierData, setSupplierData] = useState([{ id: 1, name: "Tom", address: "Pune" }]);
     const [supplierData, setSupplierData] = useState([]);
-    const [count, abbbbbbbbbb] = useState(0);
 
     const fetchData = async () => {
         console.log("Fetching Suppliers")
@@ -43,7 +42,6 @@ const Supplier = () => {
                     })
                 }
             </div>
-            <div> Count : {count}</div>
         </>
     )
 }

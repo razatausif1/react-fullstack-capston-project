@@ -1,5 +1,6 @@
 // src/components/auth/LoginForm.tsx
-import { Button, TextField, Paper, Typography, Stack } from "@mui/material";
+import { Box, Button, TextField, Paper } from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useState } from "react";
 import type { LoginRequest } from "../../types/LoginRequest";
 
@@ -15,7 +16,7 @@ const LoginForm = ({ onLogin }: Props) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setLoginData(prev => ({...prev, value}));
+        setLoginData(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,19 +25,9 @@ const LoginForm = ({ onLogin }: Props) => {
     };
 
     return (
-        <Paper
-            elevation={3}
-            sx={{ p: 4, maxWidth: 450, mx: "auto" }}
-        >
-            <Typography
-                variant="h5"
-                gutterBottom
-            >
-                Login
-            </Typography>
-
+        <Paper elevation={0} className="login-form-paper">
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2}>
+                <Box className="login-form-fields">
                     <TextField
                         label="Username"
                         name="username"
@@ -44,6 +35,7 @@ const LoginForm = ({ onLogin }: Props) => {
                         onChange={handleChange}
                         fullWidth
                         required
+                        autoComplete="username"
                     />
 
                     <TextField
@@ -54,15 +46,19 @@ const LoginForm = ({ onLogin }: Props) => {
                         onChange={handleChange}
                         fullWidth
                         required
+                        autoComplete="current-password"
                     />
 
                     <Button
                         variant="contained"
                         type="submit"
+                        size="large"
+                        endIcon={<ArrowForwardIcon />}
+                        className="login-submit"
                     >
                         Login
                     </Button>
-                </Stack>
+                </Box>
             </form>
         </Paper>
     );
